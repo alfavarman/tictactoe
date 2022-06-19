@@ -181,8 +181,40 @@ def print_result():
 #     - The game ends when someone wins or the board is full
 #     - The game handles bad input (wrong coordinates) without crashing
 
+def get_ai_move(player):
+    """function returns tuple with coordinates (row, column) from user input."""
 
-def tictactoe_game():
+    if player == 'Player1':
+        player_mark = 'X'
+    else:
+        player_mark = '0'
+
+    incorrect_input = True
+    coordinates_letter = None           # local variable is not used (by PyCharm) - not understand
+    if not coordinates:
+        incorrect_input = False
+
+    while incorrect_input:
+        print(coordinates)      # Debugging to be removed
+        move = input("Choose field by providing coordinates f.e.: A2:").casefold()
+        if move == 'Quit'.casefold():
+            print('Bye Bye')
+            sys.exit()
+        elif move in coordinates:
+            if (tuple(move)[0]) == 'a':
+                coordinates_letter = 0
+            elif (tuple(move)[0]) == 'b':
+                coordinates_letter = 1
+            else:
+                coordinates_letter = 2
+            boards[coordinates_letter][int(tuple(move)[1]) - 1] = player_mark
+            coordinates.remove(move)
+            incorrect_input = False
+            return tuple(move)
+        else:
+            pass
+
+def tictactoe_game(game_mode):
     boards = init_board()
     turns = True
     players = ['Player1', 'Player2']
