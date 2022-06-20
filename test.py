@@ -26,7 +26,7 @@ boards[0][0] = boards[0][1] = boards[0][2] = 'X'
     # boards[2][0] = boards[1][1] = boards[0][2] = 'X'
 print_board(boards)
 
-a1
+
     # elif has_won('X') or has_won('0'):
     #     turns = False
     #     pass

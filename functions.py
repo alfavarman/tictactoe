@@ -1,4 +1,6 @@
 import sys
+import time
+
 
 # 1. Implement `init_board()` to return an empty 3-by-3 board, i.e.
 # a list of lists filled with dots. The inner lists are
@@ -40,69 +42,51 @@ def init_board(board_size=3):
 coordinates = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
 
 
-def get_move(player):
+def get_move():
     """function returns tuple with coordinates (row, column) from user input."""
 
-    if player == 'Player1':
-        player_mark = 'X'
-    else:
-        player_mark = '0'
-
     incorrect_input = True
-    coordinates_letter = None           # local variable is not used (by PyCharm) - not understand
-    if not coordinates:
-        incorrect_input = False
-
     while incorrect_input:
-        print(coordinates)      # Debugging to be removed
         move = input("Choose field by providing coordinates f.e.: A2:").casefold()
         if move == 'Quit'.casefold():
             print('Bye Bye')
+            time.sleep(1)
             sys.exit()
-        elif move in coordinates:
+        elif move in coordinates:  # available moves
             if (tuple(move)[0]) == 'a':
                 coordinates_letter = 0
             elif (tuple(move)[0]) == 'b':
                 coordinates_letter = 1
             else:
                 coordinates_letter = 2
-            boards[coordinates_letter][int(tuple(move)[1]) - 1] = player_mark
+
+            coordinate = (coordinates_letter, int((tuple(move)[1])) - 1)
             coordinates.remove(move)
-            incorrect_input = False
-            return tuple(move)
+            return coordinate
         else:
             pass
 
 
-
-
-# ? since fun get_move required to validate the input in terms of not used spot useless to repeat...
 # 3. Implement `mark()` that writes the value of `player` (`X` or `0`) into the  `row` & `col` element of `board`.
 #     - If the cell at `row` and `col` is empty (contains a dot `.`), it is marked with `player`
 #     - It does not do anything if the coordinates are out of bounds
 #     - It does not do anything if the cell is already marked
-# def mark(player):
-#     x = ('a', '3')
-#     coordinates = ('a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3')
-#     coordinates_letter = None
-#
-#     if player == 'Player1':
-#         player_mark = 'X'
-#     else:
-#         player_mark = '0'
-#
-#     if x in coordinates:
-#         if (tuple(x)[0]) == 'a':
-#             coordinates_letter = 0
-#         elif (tuple(x)[0]) == 'b':
-#             coordinates_letter = 1
-#         else:
-#             coordinates_letter = 2
-#     if boards[coordinates_letter][int(tuple(x)[1])-1] != '.':
-#         boards[coordinates_letter][int(tuple(x)[1])-1] = player_mark
-#     else:
-#         pass
 
+def mark(player, boards, row, col):
+    """function marks player X or 0 if the space is available
+
+    player - Player1 - X, Player2 - 0
+    boards - board where to make a mark
+    row - row of boards
+    col - column of boards
+    """
+
+    if player == 'Player1':
+        player_mark = 'X'
+    else:
+        player_mark = '0'
+    if boards[row][col] == '.':
+        boards[row][col] = player_mark
 
 
 # 4. Implement `has_won()` that returns `True` if `player` (`X` or `0`)  has three of their marks in a horizontal,
@@ -111,7 +95,7 @@ def get_move(player):
 #     - Returns `False` if `player` doesn't have a three-in-a-row on `board`
 
 
-def has_won(player):  # to be PYTHONIC
+def has_won(player, boards):  # to be PYTHONIC
     if boards[0][0] == boards[0][1] == boards[0][2] == player or \
             boards[1][0] == boards[1][1] == boards[1][2] == player or \
             boards[2][0] == boards[2][1] == boards[2][2] == player or \
@@ -165,10 +149,10 @@ def print_board(boards):
 #     - If nobody wins, print "It's a tie!"
 
 
-def print_result():
-    if has_won('X') is True:
+def print_result(boards):
+    if has_won('X', boards) is True:
         print('X has won!')
-    elif has_won('0') is True:
+    elif has_won('0', boards) is True:
         print('0 has won!')
     else:
         print("It's a tie!")
@@ -190,12 +174,12 @@ def get_ai_move(player):
         player_mark = '0'
 
     incorrect_input = True
-    coordinates_letter = None           # local variable is not used (by PyCharm) - not understand
+    coordinates_letter = None  # local variable is not used (by PyCharm) - not understand
     if not coordinates:
         incorrect_input = False
 
     while incorrect_input:
-        print(coordinates)      # Debugging to be removed
+        print(coordinates)  # Debugging to be removed
         move = input("Choose field by providing coordinates f.e.: A2:").casefold()
         if move == 'Quit'.casefold():
             print('Bye Bye')
@@ -214,19 +198,21 @@ def get_ai_move(player):
         else:
             pass
 
-def tictactoe_game(game_mode):
+
+def tictactoe_game():
     boards = init_board()
     turns = True
     players = ['Player1', 'Player2']
     while turns:
         for player in players:
             print_board(boards)
-            get_move(player)
-            if is_full(boards) or has_won('X') or has_won('0'):
+            row, col = get_move()
+            mark(player, boards, row, col)
+            if is_full(boards) or has_won('X', boards) or has_won('0', boards):
                 turns = False
-                print_result()  # print_result goes again through has_won function to check = not efficient
+                print_board(boards)
+                print_result(boards)  # print_result goes again through has_won function to check = not efficient
                 break
-
 
 
 # 10. Implement player-against-AI mode. The AI can drive one of the players, and the game is fully playable against the
@@ -263,7 +249,6 @@ def tictactoe_game(game_mode):
 
 
 # if __name__ == '__main__':
-
 
 
 tictactoe_game()
