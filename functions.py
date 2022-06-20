@@ -42,11 +42,10 @@ def init_board(board_size=3):
 # coordinates = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
 
 
-def quit():
+def quit_game():
     print('Bye Bye')
     time.sleep(1)
     sys.exit()
-
 
 
 def available_moves(boards):
@@ -79,7 +78,7 @@ def get_move(boards):
         move = input("Choose field by providing coordinates f.e.: A2:").casefold()
         print(translate_input_moves(move))  # debugging to be removed
         if move == 'Quit'.casefold():
-            quit()
+            quit_game()
         elif translate_input_moves(move) in coordinates:  #
             coordinates.remove(translate_input_moves(move))
             return translate_input_moves(move)
@@ -185,7 +184,11 @@ def print_result(boards):
 #     - The game ends when someone wins or the board is full
 #     - The game handles bad input (wrong coordinates) without crashing
 
-def tictactoe_game():
+def tictactoe_game(mode='Players'):
+    """fun to call the game
+    mode: define mode to be played: Players, Human-Ai, Ai-Human, Ai-Ai
+    """
+
     boards = init_board()
     turns = True
     players = ['Player1', 'Player2']
@@ -204,13 +207,13 @@ def tictactoe_game():
 def main_manu():
     while True:
         menu_choice = input("""
-\t:::Tic<>Tac<>Toe:::
+\t::::Tic<>Tac<>Toe::::
 \t:::::::::::::::::::::
 \t1. Player vs Player
 \t2. Player vs Computer
         """)
         if menu_choice == 'Quit'.casefold():
-            quit()
+            quit_game()
         elif menu_choice == '1':
             tictactoe_game()
         elif menu_choice == '2':
@@ -225,9 +228,10 @@ def main_manu():
             else:
                 pass
         elif menu_choice == 'Quit'.casefold():
-            quit()
+            quit_game()
         else:
             pass
+
 
 # 10. Implement player-against-AI mode. The AI can drive one of the players, and the game is fully playable against the
 #     computer.
@@ -265,4 +269,4 @@ def main_manu():
 # if __name__ == '__main__':
 
 
-tictactoe_game()
+main_manu()
