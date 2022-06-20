@@ -39,30 +39,50 @@ def init_board(board_size=3):
 #     - When the player types `quit` instead of coordinates, the program exits.
 # get_move fun added
 
-coordinates = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
+# coordinates = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
 
 
-def get_move():
+def quit():
+    print('Bye Bye')
+    time.sleep(1)
+    sys.exit()
+
+
+
+def available_moves(boards):
+    available_moves_list = []
+    for i_list in range(len(boards)):
+        for i_element in range(len(boards[i_list])):
+            if boards[i_list][i_element] == '.':
+                available_moves_list.append((i_list, i_element))
+    return available_moves_list
+
+
+def translate_input_moves(inp_str):
+    if (tuple(inp_str)[0]) == 'a':
+        return tuple((0, (int((tuple(inp_str)[1]))) - 1))
+    elif (tuple(inp_str)[0]) == 'b':
+        return tuple((1, (int((tuple(inp_str)[1]))) - 1))
+    elif (tuple(inp_str)[0]) == 'c':
+        return tuple((2, (int((tuple(inp_str)[1]))) - 1))
+    else:
+        return None
+
+
+def get_move(boards):
     """function returns tuple with coordinates (row, column) from user input."""
+
+    coordinates = available_moves(boards)
 
     incorrect_input = True
     while incorrect_input:
         move = input("Choose field by providing coordinates f.e.: A2:").casefold()
+        print(translate_input_moves(move))  # debugging to be removed
         if move == 'Quit'.casefold():
-            print('Bye Bye')
-            time.sleep(1)
-            sys.exit()
-        elif move in coordinates:  # available moves
-            if (tuple(move)[0]) == 'a':
-                coordinates_letter = 0
-            elif (tuple(move)[0]) == 'b':
-                coordinates_letter = 1
-            else:
-                coordinates_letter = 2
-
-            coordinate = (coordinates_letter, int((tuple(move)[1])) - 1)
-            coordinates.remove(move)
-            return coordinate
+            quit()
+        elif translate_input_moves(move) in coordinates:  #
+            coordinates.remove(translate_input_moves(move))
+            return translate_input_moves(move)
         else:
             pass
 
@@ -165,40 +185,6 @@ def print_result(boards):
 #     - The game ends when someone wins or the board is full
 #     - The game handles bad input (wrong coordinates) without crashing
 
-def get_ai_move(player):
-    """function returns tuple with coordinates (row, column) from user input."""
-
-    if player == 'Player1':
-        player_mark = 'X'
-    else:
-        player_mark = '0'
-
-    incorrect_input = True
-    coordinates_letter = None  # local variable is not used (by PyCharm) - not understand
-    if not coordinates:
-        incorrect_input = False
-
-    while incorrect_input:
-        print(coordinates)  # Debugging to be removed
-        move = input("Choose field by providing coordinates f.e.: A2:").casefold()
-        if move == 'Quit'.casefold():
-            print('Bye Bye')
-            sys.exit()
-        elif move in coordinates:
-            if (tuple(move)[0]) == 'a':
-                coordinates_letter = 0
-            elif (tuple(move)[0]) == 'b':
-                coordinates_letter = 1
-            else:
-                coordinates_letter = 2
-            boards[coordinates_letter][int(tuple(move)[1]) - 1] = player_mark
-            coordinates.remove(move)
-            incorrect_input = False
-            return tuple(move)
-        else:
-            pass
-
-
 def tictactoe_game():
     boards = init_board()
     turns = True
@@ -206,7 +192,7 @@ def tictactoe_game():
     while turns:
         for player in players:
             print_board(boards)
-            row, col = get_move()
+            row, col = get_move(boards)
             mark(player, boards, row, col)
             if is_full(boards) or has_won('X', boards) or has_won('0', boards):
                 turns = False
@@ -214,6 +200,34 @@ def tictactoe_game():
                 print_result(boards)  # print_result goes again through has_won function to check = not efficient
                 break
 
+
+def main_manu():
+    while True:
+        menu_choice = input("""
+\t:::Tic<>Tac<>Toe:::
+\t:::::::::::::::::::::
+\t1. Player vs Player
+\t2. Player vs Computer
+        """)
+        if menu_choice == 'Quit'.casefold():
+            quit()
+        elif menu_choice == '1':
+            tictactoe_game()
+        elif menu_choice == '2':
+            menu_choice2 = input("""
+            1. Player vs AI
+            2. AI vs Player
+            """)
+            if menu_choice2 == '1':
+                tictactoe_game('HUMAN-AI')
+            elif menu_choice2 == '2':
+                tictactoe_game('AI-HUMAN')
+            else:
+                pass
+        elif menu_choice == 'Quit'.casefold():
+            quit()
+        else:
+            pass
 
 # 10. Implement player-against-AI mode. The AI can drive one of the players, and the game is fully playable against the
 #     computer.
