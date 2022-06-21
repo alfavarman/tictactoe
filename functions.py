@@ -73,11 +73,9 @@ def get_move(boards):
     """function returns tuple with coordinates (row, column) from user input."""
 
     coordinates = available_moves(boards)
-
     incorrect_input = True
     while incorrect_input:
         move = input("Choose field by providing coordinates f.e.: A2:").casefold()
-        print(translate_input_moves(move))  # debugging to be removed
         if move == 'Quit'.casefold():
             quit_game()
         elif translate_input_moves(move) in coordinates:  #
@@ -87,11 +85,12 @@ def get_move(boards):
             pass
 
 
-def get_move_ai(boards):
+def get_move_ai(boards):        # not real AI computer just pick random
     coordinates = available_moves(boards)
     move = random.choice(coordinates)
-    coordinates.remove(translate_input_moves(move))
-    return translate_input_moves(move)
+    coordinates.remove(move)
+    time.sleep(0.8)
+    return move
 
 
 # 3. Implement `mark()` that writes the value of `player` (`X` or `0`) into the  `row` & `col` element of `board`.
@@ -109,7 +108,7 @@ def mark(player, boards, row, col):
     col - column of boards
     """
 
-    if player == 'Player1':
+    if player == 0:
         player_mark = 'X'
     else:
         player_mark = '0'
@@ -134,7 +133,7 @@ def has_won(player, boards):  # to be PYTHONIC
             boards[2][0] == boards[1][1] == boards[0][2] == player:
         return True
     else:
-        return False
+        return False  # to make list comprehention and write it more pythonic
 
 
 # 5. Implement `is_full()` that returns `True` if the board is full.
@@ -163,12 +162,14 @@ def is_full(lists):
 
 
 def print_board(boards):
+    print()
     print(f'\t1\t2\t3\nA\t', end='')
     print(*boards[0], sep=' | ')
     print(f'   ---+---+---\nB\t', end='')
     print(*boards[1], sep=' | ')
     print(f'   ---+---+---\nC\t', end='')
     print(*boards[2], sep=' | ')
+    print()
 
 
 # 7. Implement `print-result()` that displays the result of the game.
@@ -197,25 +198,27 @@ def tictactoe_game(mode='Players'):
     """fun to call the game
     mode: define mode to be played: Players, Human-Ai, Ai-Human, Ai-Ai
     """
-    modes = ['Players', 'HUMAN-AI', 'AI-HUMAN', 'AI-AI']
-    if mode == 'HUMAN-AI'
-        players
-    elif mode == 'AI-HUMAN'
-    elif mode == 'AI-AI'
-    else:
-        players = ['Player1', 'Player2']
 
     boards = init_board()
     turns = True
+    players = [0, 1]
+    if mode == 'HUMAN-AI':
+        moves_list = [get_move, get_move_ai]
+    elif mode == 'AI-HUMAN':
+        moves_list = [get_move_ai, get_move]
+    elif mode == 'AI-AI':
+        moves_list = [get_move_ai, get_move_ai]
+    else:
+        moves_list = [get_move, get_move]
 
     while turns:
         for player in players:
             print_board(boards)
-            row, col = get_move(boards) #
-            #row, col = get_move_ai(boards)
+            time.sleep(0.6)
+            row, col = moves_list[player](boards)
             mark(player, boards, row, col)
             if is_full(boards) or has_won('X', boards) or has_won('0', boards):
-                turns = False
+                turns = False  # while true, break - lamie obie lupy?
                 print_board(boards)
                 print_result(boards)  # print_result goes again through has_won function to check = not efficient
                 break
@@ -223,7 +226,6 @@ def tictactoe_game(mode='Players'):
 
 def main_manu():
     """fun to generate menu and handle menu choices"""
-
 
     while True:
         menu_choice = input("""
