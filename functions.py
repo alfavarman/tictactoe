@@ -1,5 +1,6 @@
 import sys
 import time
+import random
 
 
 # 1. Implement `init_board()` to return an empty 3-by-3 board, i.e.
@@ -86,10 +87,18 @@ def get_move(boards):
             pass
 
 
+def get_move_ai(boards):
+    coordinates = available_moves(boards)
+    move = random.choice(coordinates)
+    coordinates.remove(translate_input_moves(move))
+    return translate_input_moves(move)
+
+
 # 3. Implement `mark()` that writes the value of `player` (`X` or `0`) into the  `row` & `col` element of `board`.
 #     - If the cell at `row` and `col` is empty (contains a dot `.`), it is marked with `player`
 #     - It does not do anything if the coordinates are out of bounds
 #     - It does not do anything if the cell is already marked
+
 
 def mark(player, boards, row, col):
     """function marks player X or 0 if the space is available
@@ -188,14 +197,22 @@ def tictactoe_game(mode='Players'):
     """fun to call the game
     mode: define mode to be played: Players, Human-Ai, Ai-Human, Ai-Ai
     """
+    modes = ['Players', 'HUMAN-AI', 'AI-HUMAN', 'AI-AI']
+    if mode == 'HUMAN-AI'
+        players
+    elif mode == 'AI-HUMAN'
+    elif mode == 'AI-AI'
+    else:
+        players = ['Player1', 'Player2']
 
     boards = init_board()
     turns = True
-    players = ['Player1', 'Player2']
+
     while turns:
         for player in players:
             print_board(boards)
-            row, col = get_move(boards)
+            row, col = get_move(boards) #
+            #row, col = get_move_ai(boards)
             mark(player, boards, row, col)
             if is_full(boards) or has_won('X', boards) or has_won('0', boards):
                 turns = False
@@ -205,6 +222,9 @@ def tictactoe_game(mode='Players'):
 
 
 def main_manu():
+    """fun to generate menu and handle menu choices"""
+
+
     while True:
         menu_choice = input("""
 \t::::Tic<>Tac<>Toe::::
@@ -220,11 +240,14 @@ def main_manu():
             menu_choice2 = input("""
             1. Player vs AI
             2. AI vs Player
+            3. AI vs AI
             """)
             if menu_choice2 == '1':
                 tictactoe_game('HUMAN-AI')
             elif menu_choice2 == '2':
                 tictactoe_game('AI-HUMAN')
+            elif menu_choice2 == '3':
+                tictactoe_game('AI-AI')
             else:
                 pass
         elif menu_choice == 'Quit'.casefold():
@@ -270,3 +293,4 @@ def main_manu():
 
 
 main_manu()
+

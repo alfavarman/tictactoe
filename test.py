@@ -42,3 +42,21 @@ print_board(boards)
 
 print_board(boards)
 
+# def tictactoe_game(mode='Players'):
+#     """fun to call the game
+#     mode: define mode to be played: Players, Human-Ai, Ai-Human, Ai-Ai
+#     """
+#     modes = ['Players', 'HUMAN-AI', 'AI-HUMAN', 'AI-AI']
+#     boards = init_board()
+#     turns = True
+#     players = ['Player1', 'Player2']
+#     while turns:
+#         for player in players:
+#             print_board(boards)
+#             row, col = get_move(boards)
+#             mark(player, boards, row, col)
+#             if is_full(boards) or has_won('X', boards) or has_won('0', boards):
+#                 turns = False
+#                 print_board(boards)
+#                 print_result(boards)  # print_result goes again through has_won function to check = not efficient
+#                 break
