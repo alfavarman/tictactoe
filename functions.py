@@ -257,7 +257,7 @@ def main_manu():
             pass
 
 
-# 10. Implement player-against-AI mode. The AI can drive one of the players, and the game is fully playable against the
+# 10.DONE  Implement player-against-AI mode. The AI can drive one of the players, and the game is fully playable against the
 #     computer.
 #     - When `tictactoe_game()` is called with the argument `'HUMAN-AI'` then it calls `get_ai_move()` instead
 #       of `get_move()` when it's Player `0` turn
@@ -284,7 +284,7 @@ def main_manu():
 # 13. [OPTIONAL] AI is unbeatable in all cases.
 #     - There is no strategy or combination of steps that could win the game against the AI
 #
-# 14. [OPTIONAL] AI can play against itself
+# 14. DONE [OPTIONAL] AI can play against itself
 #     - When `tictactoe_game()` is called with the argument `'AI-AI'` then it calls `get_ai_move` for both players
 #     - The game comes to an end without any user input
 #     - Game play is easy to follow as there is a 1 seconds delay between the moves
