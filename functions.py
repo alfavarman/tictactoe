@@ -73,24 +73,23 @@ def translate_input_moves(inp_str):
 def get_move(boards):
     """function returns tuple with coordinates (row, column) from user input."""
 
-    coordinates = available_moves(boards)
+    #coordinates = available_moves(boards)
     incorrect_input = True
     while incorrect_input:
         move = input("Choose field by providing coordinates f.e.: A2:").casefold()
         if move == 'Quit'.casefold():
             quit_game()
-        elif translate_input_moves(move) in coordinates:  #
-            coordinates.remove(translate_input_moves(move))
+        elif translate_input_moves(move) in available_moves(boards): #coordinates:
             return translate_input_moves(move)
         else:
             pass
 
 
 def get_move_ai(boards):        # not real AI computer just pick random
-    coordinates = available_moves(boards)
-    move = random.choice(coordinates)
-    coordinates.remove(move)
+    #coordinates = available_moves(boards)
+    move = random.choice(available_moves(boards))
     time.sleep(0.8)
+    print(move) # debugging
     return move
 
 
@@ -127,7 +126,7 @@ def has_won(player, boards):  # to be PYTHONIC
     if boards[0][0] == boards[0][1] == boards[0][2] == player or \
             boards[1][0] == boards[1][1] == boards[1][2] == player or \
             boards[2][0] == boards[2][1] == boards[2][2] == player or \
-            boards[0][0] == boards[1][0] == boards[1][0] == player or \
+            boards[0][0] == boards[1][0] == boards[2][0] == player or \
             boards[0][1] == boards[1][1] == boards[2][1] == player or \
             boards[0][2] == boards[1][2] == boards[2][2] == player or \
             boards[0][0] == boards[1][1] == boards[2][2] == player or \
