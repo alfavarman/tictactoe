@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import random
@@ -163,11 +164,11 @@ def is_full(lists):
 
 def print_board(boards):
     print()
-    print(f'\t1\t2\t3\nA\t', end='')
+    print(f'\t1   2   3\nA\t', end='')
     print(*boards[0], sep=' | ')
-    print(f'   ---+---+---\nB\t', end='')
+    print(f'\t---+---+---\nB\t', end='')
     print(*boards[1], sep=' | ')
-    print(f'   ---+---+---\nC\t', end='')
+    print(f'\t---+---+---\nC\t', end='')
     print(*boards[2], sep=' | ')
     print()
 
@@ -198,7 +199,7 @@ def tictactoe_game(mode='Players'):
     """fun to call the game
     mode: define mode to be played: Players, Human-Ai, Ai-Human, Ai-Ai
     """
-
+    os.system('clear')
     boards = init_board()
     turns = True
     players = [0, 1]
@@ -213,6 +214,7 @@ def tictactoe_game(mode='Players'):
 
     while turns:
         for player in players:
+            os.system('clear')
             print_board(boards)
             time.sleep(0.6)
             row, col = moves_list[player](boards)
@@ -291,8 +293,8 @@ def main_manu():
 #     - Game play is easy to follow as there is a 1 seconds delay between the moves
 
 
-# if __name__ == '__main__':
 
 
-main_manu()
+
+
 
