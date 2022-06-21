@@ -73,23 +73,20 @@ def translate_input_moves(inp_str):
 def get_move(boards):
     """function returns tuple with coordinates (row, column) from user input."""
 
-    #coordinates = available_moves(boards)
     incorrect_input = True
     while incorrect_input:
         move = input("Choose field by providing coordinates f.e.: A2:").casefold()
         if move == 'Quit'.casefold():
             quit_game()
-        elif translate_input_moves(move) in available_moves(boards): #coordinates:
+        elif translate_input_moves(move) in available_moves(boards):
             return translate_input_moves(move)
         else:
             pass
 
 
 def get_move_ai(boards):        # not real AI computer just pick random
-    #coordinates = available_moves(boards)
     move = random.choice(available_moves(boards))
     time.sleep(0.8)
-    print(move) # debugging
     return move
 
 
@@ -133,7 +130,8 @@ def has_won(player, boards):  # to be PYTHONIC
             boards[2][0] == boards[1][1] == boards[0][2] == player:
         return True
     else:
-        return False  # to make list comprehention and write it more pythonic
+        return False  # i tried all method but didn't work:
+#     all(boards[0], player) - did return ture all the time...
 
 
 # 5. Implement `is_full()` that returns `True` if the board is full.
@@ -290,10 +288,6 @@ def main_manu():
 #     - When `tictactoe_game()` is called with the argument `'AI-AI'` then it calls `get_ai_move` for both players
 #     - The game comes to an end without any user input
 #     - Game play is easy to follow as there is a 1 seconds delay between the moves
-
-
-
-
 
 
 
