@@ -152,7 +152,7 @@ def mark(player: int, boards: list, row: int, col: int) -> None:
 #     - Returns `False` if `player` doesn't have a three-in-a-row on `board`li
 
 
-def has_won(player: str, boards: list) -> bool:     # TO DO pythonic
+def has_won(player: str, boards: list) -> bool:  # TO DO pythonic
     """function to return True for if win condition is reached
 
     :param player: str 'X' or '0'
@@ -253,14 +253,11 @@ def tictactoe_game(mode: str = 'Players') -> None:
     boards = init_board()
     turns = True
     players = [0, 1]
-    if mode == 'HUMAN-AI':
-        moves_list = [get_move, get_move_ai]
-    elif mode == 'AI-HUMAN':
-        moves_list = [get_move_ai, get_move]
-    elif mode == 'AI-AI':
-        moves_list = [get_move_ai, get_move_ai]
-    else:
-        moves_list = [get_move, get_move]
+    modes = {'HUMAN-AI': [get_move, get_move_ai],
+             'AI-HUMAN': [get_move_ai, get_move],
+             'AI-AI': [get_move_ai, get_move_ai],
+             'Players': [get_move, get_move]}
+    moves_list = modes.get(mode)
 
     while turns:
         for player in players:
@@ -308,7 +305,6 @@ def main_manu():
             quit_game()
         else:
             pass
-
 
 # 10.DONE  Implement player-against-AI mode. The AI can drive one of the players, and the game is fully playable
 # against the computer. - When `tictactoe_game()` is called with the argument `'HUMAN-AI'` then it calls
