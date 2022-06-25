@@ -96,6 +96,21 @@ def translate_input_moves(inp_str: str) -> tuple:
     # #    return None         # call error! this is where incorrect input is coming from
 
 
+def raw_available_moves(boards: list) -> list:
+    raw_moves = []
+    for tuples in available_moves(boards):
+        raw_moves.append(list(tuples))
+
+    for el in range(len(raw_moves)):
+        if raw_moves[el][0] == 0:
+            raw_moves[el][0] = 'A'
+        elif raw_moves[el][0] == 1:
+            raw_moves[el][0] = 'B'
+        else:
+            raw_moves[el][0] = 'C'
+    return raw_moves
+
+
 def get_move(boards: list) -> tuple:
     """function returns tuple with coordinates (row, column) from user input."""
 
@@ -106,18 +121,54 @@ def get_move(boards: list) -> tuple:
 
         if move == 'Quit'.casefold():
             quit_game()
-        elif move[0] not in correct_move[0] or move[1] not in correct_move[1] or len(move) != 2:
-            print(f'Wrong Input. Available moves:{available_moves(boards)}')
-        elif translate_input_moves(move) in available_moves(boards):
+        elif move[0] not in correct_move[0] or move[1] not in correct_move[1] or len(move) != 2 or\
+                translate_input_moves(move) not in available_moves(boards):
+            print(f'Wrong Input. Available moves:{raw_available_moves(boards)}')
+        else:
             return translate_input_moves(move)
 
 
-def get_move_ai(boards: list) -> tuple:  # not real AI computer just pick random
+# def get_move_(boards: list) -> tuple:  # not real AI computer just pick random
+#     """function to randomly pick and return in form of tuple a move from available moves"
+#
+#     :param boards: list of boards
+#     :return: tuple of coordinates
+#     """
+#
+#     if all(boards) == '.':
+#         move = random.choice(available_moves(boards))
+#     else:
+#         move = minimax(boards)
+#     time.sleep(0.8)
+#     return move
+
+#
+# def minimax(position:list, depth=15, maximizing_player=True):
+#     if has_won('X', position) or has_won('0', position) or is_full(position):
+#         return position
+#
+#     if maximizing_player:
+#         max_eval = -1000
+#         for row, col in enumerate(position):
+#             evaluation = minimax(position[row][col], depth - 1, False)
+#             max_eval = max(max_eval, evaluation)
+#         return max_eval
+#     else:
+#         min_eval = 1000
+#         for row, col in enumerate(position):
+#             evaluation = minimax(position[row][col], depth - 1, True)
+#             min_eval = min(min_eval, evaluation)
+#             beta = min(min_eval, evaluation)
+#         return min_eval
+
+
+def get_move_ai(boards: list) -> tuple:
     """function to randomly pick and return in form of tuple a move from available moves"
 
     :param boards: list of boards
     :return: tuple of coordinates
     """
+
     move = random.choice(available_moves(boards))
     time.sleep(0.8)
     return move
