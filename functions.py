@@ -15,6 +15,7 @@ import random
 # ```
 # [['.','.','.'],['.','.','.'],['.','.','.']]
 # ```
+from typing import Union, Dict, Optional, Any
 
 
 def init_board(board_size: int = 3, empty_field: str = '.') -> list:
@@ -121,48 +122,67 @@ def get_move(boards: list) -> tuple:
 
         if move == 'Quit'.casefold():
             quit_game()
-        elif move[0] not in correct_move[0] or move[1] not in correct_move[1] or len(move) != 2 or\
+        elif move[0] not in correct_move[0] or move[1] not in correct_move[1] or len(move) != 2 or \
                 translate_input_moves(move) not in available_moves(boards):
             print(f'Wrong Input. Available moves:{raw_available_moves(boards)}')
         else:
             return translate_input_moves(move)
 
 
-# def get_move_(boards: list) -> tuple:  # not real AI computer just pick random
-#     """function to randomly pick and return in form of tuple a move from available moves"
-#
-#     :param boards: list of boards
-#     :return: tuple of coordinates
-#     """
-#
-#     if all(boards) == '.':
-#         move = random.choice(available_moves(boards))
-#     else:
-#         move = minimax(boards)
-#     time.sleep(0.8)
-#     return move
+def get_move_ai(boards: list) -> tuple:  # not real AI computer just pick random
+    time.sleep(1)
+    best_score = -1000
+    best_move = 0
+    """function to randomly pick and return in form of tuple a move from available moves"
 
-#
-# def minimax(position:list, depth=15, maximizing_player=True):
-#     if has_won('X', position) or has_won('0', position) or is_full(position):
-#         return position
-#
-#     if maximizing_player:
-#         max_eval = -1000
-#         for row, col in enumerate(position):
-#             evaluation = minimax(position[row][col], depth - 1, False)
-#             max_eval = max(max_eval, evaluation)
-#         return max_eval
-#     else:
-#         min_eval = 1000
-#         for row, col in enumerate(position):
-#             evaluation = minimax(position[row][col], depth - 1, True)
-#             min_eval = min(min_eval, evaluation)
-#             beta = min(min_eval, evaluation)
-#         return min_eval
+    :param boards: list of boards
+    :return: tuple of coordinates
+    """
+
+    if len(available_moves(boards)) == 9:
+        best_move = random.choice(available_moves(boards))
+    else:
+        for possible_move in available_moves(boards):
+            mark('X', boards, possible_move[0], possible_move[1])
+            score = minimax(boards, False)
+            mark('.', boards, possible_move[0], possible_move[1])
+            if score > best_score:
+                best_score = score
+                best_move = possible_move
+                time.sleep(0.8)
+    return best_move
 
 
-def get_move_ai(boards: list) -> tuple:
+def minimax(boards: list, depth: int = 0, is_maximizing: bool = False) -> tuple or list:
+    # max_player = 'X' # letter
+    # other_player = '0' if max_player == 'X' else 'X'
+
+    if has_won('0', boards):
+        return -100
+    elif has_won('X', boards):
+        return 100
+    elif is_full(boards):
+        return 0
+
+    if is_maximizing:
+        max_eval = -1000
+        for possible_move in available_moves(boards):
+            mark('X', boards, possible_move[0], possible_move[1])
+            sim_eval = minimax(boards, 3, False)
+            max_eval = max(max_eval, sim_eval)
+            mark('.', boards, possible_move[0], possible_move[1])
+        return max_eval
+    else:
+        min_eval = 1000
+        for possible_move in available_moves(boards):
+            mark('0', boards, possible_move[0], possible_move[1])
+            sim_eval = minimax(boards, 3, True)
+            min_eval = min(min_eval, sim_eval)
+            mark('.', boards, possible_move[0], possible_move[1])
+        return min_eval
+
+
+def get_move_(boards: list) -> tuple:
     """function to randomly pick and return in form of tuple a move from available moves"
 
     :param boards: list of boards
@@ -180,7 +200,7 @@ def get_move_ai(boards: list) -> tuple:
 #     - It does not do anything if the cell is already marked
 
 
-def mark(player: int, boards: list, row: int, col: int) -> None:
+def mark(player: int or str, boards: list, row: int, col: int) -> None:
     """function to mark player move on boards
 
     :type boards: list
@@ -189,10 +209,12 @@ def mark(player: int, boards: list, row: int, col: int) -> None:
     :param row: int index of list in boards
     :param col: int index of element in boards
     """
-    if player == 0:
+    if player == 0 or player == 'X':
         player_mark = 'X'
-    else:
+    elif player == 1 or player == '0':
         player_mark = '0'
+    else:
+        player_mark = '.'
 
     boards[row][col] = player_mark
 
@@ -233,8 +255,13 @@ def is_full(lists: list, empty_cell: str = '.') -> bool:
     """
     if any(empty_cell in nested_list for nested_list in lists):
         return False
-    # else:
-    #     return True
+    else:
+        return True
+
+
+def game_over(boards: list) -> bool:
+    if has_won('X', boards) or has_won('0', boards) or is_full(boards):
+        return True
 
 
 # 6.DONE Implement `print_board()` that prints the board to the screen.
@@ -295,6 +322,7 @@ def print_result(boards: list) -> None:
 #     - The game ends when someone wins or the board is full
 #     - The game handles bad input (wrong coordinates) without crashing
 
+
 def tictactoe_game(mode: str = 'Players') -> None:
     """function to call the game in mode:str
 
@@ -314,7 +342,6 @@ def tictactoe_game(mode: str = 'Players') -> None:
         for player in players:
             os.system('clear')
             print_board(boards)
-            time.sleep(0.6)
             row, col = moves_list[player](boards)
             mark(player, boards, row, col)
             if is_full(boards) or has_won('X', boards) or has_won('0', boards):
@@ -357,6 +384,8 @@ def main_manu():
         else:
             pass
 
+
+tictactoe_game('AI-HUMAN')
 # 10.DONE  Implement player-against-AI mode. The AI can drive one of the players, and the game is fully playable
 # against the computer. - When `tictactoe_game()` is called with the argument `'HUMAN-AI'` then it calls
 # `get_ai_move()` instead of `get_move()` when it's Player `0` turn - When `tictactoe_game()` is called with the
