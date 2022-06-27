@@ -4,19 +4,6 @@ import time
 import random
 
 
-# 1. Implement `init_board()` to return an empty 3-by-3 board, i.e.
-# a list of lists filled with dots. The inner lists are
-#    rows.
-#     - A list of lists is returned, representing a list of rows
-#     - Every cell of the returned value is `.`
-#     - The rows of the returned value are independent (changing one row doesn't affect the others)
-#     - Printing the result of the `init_board()` function shows the following in the terminal:
-#
-# ```
-# [['.','.','.'],['.','.','.'],['.','.','.']]
-# ```
-
-
 def init_board(board_size: int = 3, empty_field: str = '.') -> list:
     """ function to return board in size of board_size nested, with empty field
 
@@ -31,22 +18,6 @@ def init_board(board_size: int = 3, empty_field: str = '.') -> list:
         for list_lvl1 in range(board_size):
             board[list_lvl0].append(empty_field)
     return board
-
-
-# 2. Implement `get_move()` that asks for user input and returns the coordinates of a valid move on board.
-#     - The player specifies coordinates as letter and number: `A2` is first row and second column,
-#     `C1` is third row and
-#       first column, etc.
-#     - The function returns a tuple of two integers: (row, col)
-# ??    - The returned coordinates start from 0
-#     - The integers indicate a valid (emptyemplty_field) position on the board
-
-#     - If the user provides coordinates that are outside of board, keep asking
-#     - If the user provides coordinates for a place that is taken, keep asking
-#     - If the user provides input that doesn't look like coordinates, keep asking
-# 9. [OPTIONAL] Allow players to quit the game anytime by typing `quit`.
-#     - When the player types `quit` instead of coordinates, the program exits.
-# get_move fun added
 
 
 def quit_game(exit_message: str = 'Bye Bye', delay: float = 1) -> None:
@@ -128,7 +99,7 @@ def get_move(boards: list) -> tuple:
             return translate_input_moves(move)
 
 
-def get_move_ai(boards: list) -> tuple:  # not real AI computer just pick random
+def get_move_ai(boards: list) -> tuple:
     time.sleep(1)
     best_score = -1000
     best_move = 0
