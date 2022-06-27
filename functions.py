@@ -109,7 +109,8 @@ def get_move_ai(boards: list) -> tuple:
     """
 
     if len(available_moves(boards)) == 9:
-        best_move = random.choice(available_moves(boards))
+        first_move = [(0, 0), (0, 2), (2, 0), (2, 2)]
+        best_move = random.choice(first_move)
     else:
         for possible_move in available_moves(boards):
             mark('X', boards, possible_move[0], possible_move[1])
@@ -137,7 +138,7 @@ def minimax(boards: list, depth: int = 0, is_maximizing: bool = False) -> tuple 
         max_eval = -1000
         for possible_move in available_moves(boards):
             mark('X', boards, possible_move[0], possible_move[1])
-            sim_eval = minimax(boards, 3, False)
+            sim_eval = minimax(boards, 9, False)
             max_eval = max(max_eval, sim_eval)
             mark('.', boards, possible_move[0], possible_move[1])
         return max_eval
@@ -145,7 +146,7 @@ def minimax(boards: list, depth: int = 0, is_maximizing: bool = False) -> tuple 
         min_eval = 1000
         for possible_move in available_moves(boards):
             mark('0', boards, possible_move[0], possible_move[1])
-            sim_eval = minimax(boards, 3, True)
+            sim_eval = minimax(boards, 9, True)
             min_eval = min(min_eval, sim_eval)
             mark('.', boards, possible_move[0], possible_move[1])
         return min_eval
